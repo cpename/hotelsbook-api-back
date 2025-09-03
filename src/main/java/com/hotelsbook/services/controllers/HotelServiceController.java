@@ -1,4 +1,4 @@
-package com.hotelsbook.services.conmtrollers;
+package com.hotelsbook.services.controllers;
 
 import java.util.List;
 
@@ -15,16 +15,23 @@ import com.hotelsbook.services.dtos.responses.HotelServicesResponseDTO;
 import com.hotelsbook.services.exceptions.ErrorResponse;
 import com.hotelsbook.services.services.interfaces.IHotelService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("api/hotels")
+@Slf4j
+@Tag(name = "Hotel resources", description = "recupare recursos de hoteles")
 public class HotelServiceController {
 	
 	@Autowired
 	private IHotelService hotelService;
 	
 	@GetMapping("/services/{hotelIds}")
+	@Operation(summary = "get los servicios de una lista de hoteles ids separado por comas")
 	public ResponseEntity<?> getHotelServices( @PathVariable("hotelIds") String hotelIds ){
-		
+		log.info("lista de ids de hoteles: " + hotelIds);
 		try {
 			List<HotelServicesResponseDTO> response = hotelService.getServicesByHotels(hotelIds);
 			
@@ -35,7 +42,8 @@ public class HotelServiceController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 			
 		} catch (Exception e) {
-			ErrorResponse error = new ErrorResponse(500, "Error interno");			
+			ErrorResponse error = new ErrorResponse(500, "Error interno");
+			log.error("Error interno: ");
 			e.printStackTrace();
 			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 			

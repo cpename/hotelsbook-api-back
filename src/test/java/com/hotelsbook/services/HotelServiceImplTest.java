@@ -2,6 +2,7 @@ package com.hotelsbook.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -69,6 +70,46 @@ public class HotelServiceImplTest {
 		assertEquals("Gym", hotelB.getServicesDTO().get(1).getServiceName());
 		assertEquals(5L, hotelB.getServicesDTO().get(1).getServiceId());
 
+	}
+	
+	@Test
+	public void getServicesByHotels_shouldReturnEmptyList_whenRepositoryReturnsEmpty() {
+		//Arrange
+		when(hotelServiceRepository.getServicesByHotels("1,2")).thenReturn(new ArrayList<>());
+		
+		//act
+		List<HotelServicesResponseDTO> result = hotelServiceImpl.getServicesByHotels("1,2");
+		
+		//assert
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+	}
+	
+	@Test
+	public void getServicesByHotels_shouldReturnEmptyList_whenHotelsIdIsNull() {
+		//arrange
+		when(hotelServiceRepository.getServicesByHotels(null)).thenReturn(new ArrayList<>());
+		
+		//act
+		List<HotelServicesResponseDTO> result = hotelServiceImpl.getServicesByHotels(null);
+		
+		//Assert
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+	}
+	
+	@Test
+	public void getServicesByHotels_shouldReturnEmptyList_whenHotelsIdIsEmpty() {
+		//arrange
+		when(hotelServiceRepository.getServicesByHotels("")).thenReturn(new ArrayList<>());
+		
+		// act
+		List<HotelServicesResponseDTO> result = hotelServiceImpl.getServicesByHotels("");
+		
+		//assert
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+		
 	}
 
 }
